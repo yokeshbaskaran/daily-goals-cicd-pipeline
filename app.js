@@ -1,48 +1,112 @@
 const form = document.getElementById("goal-form");
 const input = document.getElementById("goal-input");
 const list = document.getElementById("goals-list");
-const clearBtn = document.getElementById("clear-all");
+const clearAllBtn = document.getElementById("clear-all");
+const countEl = document.getElementById("goal-count");
 
-const STORAGE_KEY = "daily-goals-v1";
+// ───────────────────────────────
+// LOCAL STORAGE FUNCTIONS
+// ───────────────────────────────
 
-function load() {
-  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  list.innerHTML = "";
-  data.forEach((g, idx) => {
-    const li = document.createElement("li");
-    li.textContent = g;
-    const del = document.createElement("button");
-    del.textContent = "x";
-    del.onclick = () => {
-      data.splice(idx, 1);
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-      load();
-    };
-    li.appendChild(del);
-    list.appendChild(li);
-  });
+// read stored goals
+function loadGoals() {
+  const saved = localStorage.getItem("daily-goals");
+  return saved ? JSON.parse(saved) : [];
 }
 
-form.onsubmit = (e) => {
+// save current dom goals into localStorage
+function saveGoals() {
+  const items = [...list.children].map((li) => {
+    return {
+      text: li.querySelector(".goal-text").textContent,
+      completed: li.querySelector(".goal-text").classList.contains("completed"),
+    };
+  });
+
+  localStorage.setItem("daily-goals", JSON.stringify(items));
+}
+
+// ───────────────────────────────
+// UI UPDATE
+// ───────────────────────────────
+
+function updateCount() {
+  countEl.textContent = list.children.length;
+}
+
+// build one goal <li>
+function createGoalItem(text, completed = false) {
+  const li = document.createElement("li");
+
+  const span = document.createElement("span");
+  span.className = "goal-text";
+  span.textContent = text;
+  if (completed) span.classList.add("completed");
+
+  const actions = document.createElement("div");
+  actions.className = "goal-actions";
+
+  const doneBtn = document.createElement("button");
+  doneBtn.type = "button";
+  doneBtn.textContent = "Done";
+
+  const removeBtn = document.createElement("button");
+  removeBtn.type = "button";
+  removeBtn.textContent = "Remove";
+  removeBtn.classList.add("remove-btn");
+
+  doneBtn.addEventListener("click", () => {
+    span.classList.toggle("completed");
+    saveGoals(); // persist change
+  });
+
+  removeBtn.addEventListener("click", () => {
+    li.remove();
+    updateCount();
+    saveGoals(); // persist change
+  });
+
+  actions.append(doneBtn, removeBtn);
+  li.append(span, actions);
+
+  return li;
+}
+
+// ───────────────────────────────
+// FORM SUBMIT
+// ───────────────────────────────
+form.addEventListener("submit", (e) => {
   e.preventDefault();
-  const val = input.value.trim();
-  if (!val) return;
-  const data = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
-  if (data.length >= 5) {
-    alert("Limit 5 goals — delete one first.");
-    return;
-  }
-  data.push(val);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  const value = input.value.trim();
+  if (!value) return;
+
+  const li = createGoalItem(value);
+  list.appendChild(li);
+
   input.value = "";
-  load();
-};
+  updateCount();
+  saveGoals();
+});
 
-clearBtn.onclick = () => {
-  if (confirm("Clear all goals?")) {
-    localStorage.removeItem(STORAGE_KEY);
-    load();
-  }
-};
+// ───────────────────────────────
+// CLEAR ALL
+// ───────────────────────────────
+clearAllBtn.addEventListener("click", () => {
+  list.innerHTML = "";
+  updateCount();
+  saveGoals();
+});
 
-window.onload = load;
+// ───────────────────────────────
+// INITIAL LOAD FROM STORAGE
+// ───────────────────────────────
+function init() {
+  const stored = loadGoals();
+  stored.forEach((item) => {
+    const li = createGoalItem(item.text, item.completed);
+    list.appendChild(li);
+  });
+  updateCount();
+}
+
+init();

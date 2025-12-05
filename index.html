@@ -1,60 +1,45 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Daily Goals</title>
-    <link rel="stylesheet" href="styles.css">
-
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-            background: #f4f4f4
-        }
-
-        .app {
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
-            width: 320px
-        }
-
-        h1 {
-            text-align: center
-        }
-
-        #goal-input {
-            width: 70%;
-            padding: 8px
-        }
-
-        button {
-            padding: 8px
-        }
-
-        li {
-            display: flex;
-            justify-content: space-between;
-            padding: 6px 0
-        }
-    </style>
+    <link rel="stylesheet" href="style.css" />
 </head>
 
 <body>
-    <div class="app">
-        <h1>Daily Goals</h1>
-        <form id="goal-form">
-            <input id="goal-input" placeholder="Enter a goal" maxlength="100" required />
-            <button type="submit">Add</button>
-        </form>
-        <ul id="goals-list"></ul>
-        <button id="clear-all">Clear All</button>
+    <div class="page-wrapper">
+        <header class="site-header">
+            <h1 class="title">Daily Goals</h1>
+            <p class="subtitle">
+                Track what you want to accomplish today.
+            </p>
+        </header>
+
+        <main class="app">
+            <section class="counter">
+                <span class="counter-label">Total Goals:</span>
+                <span id="goal-count" class="counter-value">0</span>
+            </section>
+
+            <form id="goal-form" class="goal-form">
+                <input id="goal-input" class="goal-input" placeholder="Enter a goal" maxlength="100" required />
+                <button type="submit" class="btn primary">Add</button>
+            </form>
+
+            <ul id="goals-list" class="goals-list"></ul>
+
+            <button id="clear-all" class="btn secondary">Clear All</button>
+        </main>
+
+        <footer class="footer">
+            <p class="footer-text">
+                Made with 💖 by <strong class="footer-author">Yokesh B</strong>
+            </p>
+        </footer>
     </div>
+
     <script src="app.js"></script>
 </body>
 
