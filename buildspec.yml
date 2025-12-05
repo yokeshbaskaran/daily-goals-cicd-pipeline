@@ -1,0 +1,12 @@
+version: 0.2
+
+phases:
+  install:
+    commands:
+      - echo "Nothing to install"
+  build:
+    commands:
+      - echo "Static site build complete"
+artifacts:
+  files:
+    - "**/*"

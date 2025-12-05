@@ -1,0 +1,61 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Daily Goals</title>
+    <link rel="stylesheet" href="styles.css">
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background: #f4f4f4
+        }
+
+        .app {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, .1);
+            width: 320px
+        }
+
+        h1 {
+            text-align: center
+        }
+
+        #goal-input {
+            width: 70%;
+            padding: 8px
+        }
+
+        button {
+            padding: 8px
+        }
+
+        li {
+            display: flex;
+            justify-content: space-between;
+            padding: 6px 0
+        }
+    </style>
+</head>
+
+<body>
+    <div class="app">
+        <h1>Daily Goals</h1>
+        <form id="goal-form">
+            <input id="goal-input" placeholder="Enter a goal" maxlength="100" required />
+            <button type="submit">Add</button>
+        </form>
+        <ul id="goals-list"></ul>
+        <button id="clear-all">Clear All</button>
+    </div>
+    <script src="app.js"></script>
+</body>
+
+</html>
